@@ -1,4 +1,3 @@
-
 Vue.component('UserList', {
     template: `
         <div>
@@ -57,6 +56,8 @@ Vue.component('UserList', {
 
         </div>
         `,
+
+
     data: function () {
         return {
             tableCols: ['#', 'First-Name', 'Address', 'Email', 'Action'],
@@ -68,21 +69,25 @@ Vue.component('UserList', {
             currentUser: {},
             message: '',
             alertDanger: true,
+            url: '/helpers/actions.php'
         }
     },
 
     created(){
-        this.readUserList();
+        
+       this.readUserList();
     },
 
     methods: {
         readUserList(){
-            axios.get('actions.php?action=load')
+            axios.get(this.url + '?action=load')
             .then(function (response) {
                 return response.data;
             }).then(data => {
+                console.log(data['users']);
                 this.usersList = data['users'];
             });
+
         },
 
         userUpdateOrCreate(user) {
@@ -99,7 +104,7 @@ Vue.component('UserList', {
                 form_data.append('email', user.email);
 
                 const options = {
-                    url: 'actions.php',
+                    url: this.url,
                     method: 'POST',
                     headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
                     data: form_data,
@@ -122,8 +127,7 @@ Vue.component('UserList', {
         userDelete(data) {
             this.isOpenDelete = false;
             if ( data ) {
-
-                axios.get('actions.php?action=delete&id=' + data.id)
+                axios.get(this.url + '?action=delete&id=' + data.id)
                 .then(function (response) {
                     return response.data;
                 }).then( data => {

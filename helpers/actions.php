@@ -2,9 +2,11 @@
 
     $dbConnect =  new mysqli('127.0.0.1:3307', 'root', 'root', 'shop');
 
+
     function loadUser($mysqli) {
         $users = [];
         $sql = "SELECT id, username, email, address FROM user";
+
         $result = $mysqli->query($sql);
 
         while ($row = $result -> fetch_assoc()) {
@@ -12,6 +14,7 @@
         }
         $output['users'] = $users;
         echo json_encode($output);
+
     };
 
     function getAction(){
@@ -73,9 +76,7 @@
                 echo '{"status": 500,  "message": "parameters is empty"}';
   
             break;
-        case "edit" : 
-            echo "delete me";
-            break;
+            
         case "delete" : {
 
             $id = $_GET['id'];
